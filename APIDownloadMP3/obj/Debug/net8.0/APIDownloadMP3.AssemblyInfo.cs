@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("APIDownloadMP3")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9cbcae7bc77c018f6bed2efb3786ade366c6610b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d0af9e83bea611970473e9f371f1e4ad1c98ca05")]
 [assembly: System.Reflection.AssemblyProductAttribute("APIDownloadMP3")]
 [assembly: System.Reflection.AssemblyTitleAttribute("APIDownloadMP3")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
