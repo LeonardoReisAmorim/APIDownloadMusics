@@ -18,14 +18,10 @@ namespace APIDownloadMP3.Controllers
         [HttpPost]
         public async Task<IActionResult> DownloadVideosYoutube([FromBody] YoutubeVideos videos)
         {
-            if(String.IsNullOrWhiteSpace(videos.UrlsYoutube))
-            {
-                return BadRequest("Necessário enviar os dados");
-            }
+            var convertVideos = new ConvertVideoToAudio(videos.UrlsYoutube);
+            var fileContent = await convertVideos.ConverterVideoToAudio();
 
-            var lengthMusics = await ConvertVideoToAudio.ConverterVideoToAudio(videos.UrlsYoutube);
-
-            return Ok(lengthMusics);
+            return File(fileContent, "application/zip", "musicas.zip");
         }
     }
 }
