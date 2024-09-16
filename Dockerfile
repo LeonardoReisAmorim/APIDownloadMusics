@@ -1,17 +1,24 @@
 #See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-USER app
+USER root
 WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
 
-# Criar e ajustar permissões
-RUN mkdir -p /app/MediaToolkit && \
-    chmod -R 777 /app/MediaToolkit
+ENV DEBIAN_FRONTEND=noninteractive
 
-# Definir usuário
-USER root
+# Instalar ffmpeg
+RUN apt-get -y update && apt-get -y upgrade && apt-get install -y --no-install-recommends ffmpeg \
+    && rm -rf /var/lib/apt/lists/*
+
+# Criar diretório para ffmpeg se necessário e definir permissões
+RUN mkdir -p /MediaToolkit && chmod -R 755 /MediaToolkit
+
+# Mover o ffmpeg para o diretório correto, se necessário
+RUN ln -s $(which ffmpeg) /MediaToolkit/ffmpeg.exe
+
+USER app
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
@@ -28,5 +35,5 @@ RUN dotnet publish "./APIDownloadMP3.csproj" -c $BUILD_CONFIGURATION -o /app/pub
 
 FROM base AS final
 WORKDIR /app
-COPY --from=publish /app/publish .
+COPY --from=publish /app/publish . 
 ENTRYPOINT ["dotnet", "APIDownloadMP3.dll"]
