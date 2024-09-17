@@ -3,8 +3,7 @@
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 USER root
 WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
+EXPOSE 80
 
 ENV DEBIAN_FRONTEND=noninteractive
 
