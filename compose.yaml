@@ -7,3 +7,4 @@
       - ASPNETCORE_ENVIRONMENT=Development
     volumes:
       - ./Downloads:/app/Downloads
+    user: root  # Executa como root para garantir que tenha permissões

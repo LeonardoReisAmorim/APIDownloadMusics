@@ -12,14 +12,17 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get -y update && apt-get -y upgrade && apt-get install -y --no-install-recommends ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
-# Criar diretório para ffmpeg se necessário e definir permissões
+# Criar diretï¿½rio para ffmpeg se necessï¿½rio e definir permissï¿½es
 RUN mkdir -p /MediaToolkit && chmod -R 755 /MediaToolkit
 
-# Mover o ffmpeg para o diretório correto, se necessário
+# Mover o ffmpeg para o diretï¿½rio correto, se necessï¿½rio
 RUN ln -s $(which ffmpeg) /MediaToolkit/ffmpeg.exe
 
-# Criar diretório Downloads e ajustar permissões
+# Criar diretï¿½rio Downloads e ajustar permissï¿½es
 RUN mkdir -p /app/Downloads && chown -R app:app /app/Downloads
+
+# Definir permissÃµes recursivas para Downloads
+RUN chmod -R 777 /app/Downloads
 
 USER app
 
