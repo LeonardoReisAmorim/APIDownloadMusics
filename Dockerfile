@@ -18,6 +18,9 @@ RUN mkdir -p /MediaToolkit && chmod -R 755 /MediaToolkit
 # Mover o ffmpeg para o diretório correto, se necessário
 RUN ln -s $(which ffmpeg) /MediaToolkit/ffmpeg.exe
 
+# Criar diretório Downloads e ajustar permissões
+RUN mkdir -p /app/Downloads && chown -R app:app /app/Downloads
+
 USER app
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
