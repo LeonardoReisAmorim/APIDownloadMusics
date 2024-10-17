@@ -8,11 +8,8 @@ namespace APIDownloadMP3.Controllers
     [Route("[controller]")]
     public class DownloadMP3Controller : ControllerBase
     {
-        private readonly ILogger<DownloadMP3Controller> _logger;
-
-        public DownloadMP3Controller(ILogger<DownloadMP3Controller> logger)
+        public DownloadMP3Controller()
         {
-            _logger = logger;
         }
 
         [HttpPost]
