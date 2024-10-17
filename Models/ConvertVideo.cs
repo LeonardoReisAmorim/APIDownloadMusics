@@ -1,7 +1,7 @@
 ﻿using MediaToolkit;
 using MediaToolkit.Model;
 
-namespace DownloadMP3
+namespace APIDownloadMP3.Models
 {
     public class ConvertVideo
     {

@@ -1,6 +1,6 @@
-﻿using APIDownloadMP3.Utils;
+﻿using APIDownloadMP3.Models;
+using APIDownloadMP3.Utils;
 using DownloadMP3;
-using System.IO.Compression;
 
 namespace APIDownloadMP3.Services
 {
@@ -27,14 +27,17 @@ namespace APIDownloadMP3.Services
             {
                 foreach (var musicUrl in UrlsMusics.Split(","))
                 {
-                    var youtube = new Video(musicUrl);
-                    var video = await youtube.GetVideoAsync();
+                    var youtubeClient = new Video(musicUrl);
+                    var video = await youtubeClient.GetVideoAsync();
+                    var streamManifest = await youtubeClient.GetManifestAsync(video.Id);
+                    var streamInfo = youtubeClient.GetAudioOnlyStreamsMP4(streamManifest);
 
-                    string fileName = string.Join("_", video.FullName.Split(Path.GetInvalidFileNameChars()));
+                    string fileName = $"{video.Title}.{streamInfo.Container.Name}";
                     string pathVideoMP4 = Path.Combine(DirectoryUtils.FilesPath, fileName);
-                    string pathVideoMP3 = Path.ChangeExtension(pathVideoMP4, ".mp3");
 
-                    await FileUtils.WriteAllBytesAsync(pathVideoMP4, video.GetBytes());
+                    await youtubeClient.DownloadAsync(streamInfo, pathVideoMP4);
+
+                    string pathVideoMP3 = Path.ChangeExtension(pathVideoMP4, ".mp3");
 
                     var convertVideo = new ConvertVideo(pathVideoMP4, pathVideoMP3);
                     convertVideo.ConvertMP4ToMP3();
@@ -46,8 +49,9 @@ namespace APIDownloadMP3.Services
                 resultStream = GetStreamZipAsync();
                 DirectoryUtils.DeleteDirectoryRoot();
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
+                DirectoryUtils.DeleteDirectoryRoot();
                 throw;
             }
 
@@ -56,14 +60,12 @@ namespace APIDownloadMP3.Services
 
         private void CreateZipAllMusics()
         {
-            ZipFile.CreateFromDirectory(DirectoryUtils.FilesPath, Path.Combine(DirectoryUtils.ZipPath, DirectoryUtils.ZipFileName));
+            FileUtils.CreateZipAllMusics(DirectoryUtils.FilesPath, Path.Combine(DirectoryUtils.ZipPath, DirectoryUtils.ZipFileName));
         }
 
         private MemoryStream GetStreamZipAsync()
         {
-            var zipFilePath = Directory.GetFiles(DirectoryUtils.ZipPath, DirectoryUtils.ZipFileName, SearchOption.TopDirectoryOnly).First();
-            var allBytesZip = File.ReadAllBytes(zipFilePath);
-            return new MemoryStream(allBytesZip);
+            return FileUtils.GetStreamZipAsync(DirectoryUtils.ZipPath, DirectoryUtils.ZipFileName);
         }
     }
 }
