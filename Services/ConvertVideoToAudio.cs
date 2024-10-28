@@ -27,7 +27,7 @@ namespace APIDownloadMP3.Services
             {
                 foreach (var musicUrl in UrlsMusics.Split(","))
                 {
-                    var youtubeClient = new Video(musicUrl);
+                    var youtubeClient = new Video(musicUrl.Trim());
                     var video = await youtubeClient.GetVideoAsync();
                     var streamManifest = await youtubeClient.GetManifestAsync(video.Id);
                     var streamInfo = youtubeClient.GetAudioOnlyStreamsMP4(streamManifest);
