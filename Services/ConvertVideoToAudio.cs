@@ -22,7 +22,6 @@ namespace APIDownloadMP3.Services
 
         public async Task<Stream> ConverterVideoToAudio()
         {
-            var resultStream = new MemoryStream();
             try
             {
                 foreach (var musicUrl in UrlsMusics.Split(","))
@@ -46,16 +45,16 @@ namespace APIDownloadMP3.Services
                 }
 
                 CreateZipAllMusics();
-                resultStream = GetStreamZipAsync();
+                var resultStream = GetStreamZipAsync();
                 DirectoryUtils.DeleteDirectoryRoot();
+
+                return resultStream;
             }
             catch (Exception ex)
             {
                 DirectoryUtils.DeleteDirectoryRoot();
                 throw;
             }
-
-            return resultStream;
         }
 
         private void CreateZipAllMusics()
